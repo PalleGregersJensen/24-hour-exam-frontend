@@ -1,0 +1,9 @@
+.navHeader {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em;
+    padding: 0.2em;
+    background-color: yellowgreen;
+    color: black;
+    border-bottom: 1px solid black;
+}
