@@ -10,6 +10,7 @@ interface Athlete {
     gender: boolean;
     birthdate: string;
     age: number;
+    discipline?: string[];
 }
 
 export default function Athletes() {
