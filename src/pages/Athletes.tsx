@@ -8,10 +8,13 @@ interface Athlete {
     lastname: string;
     club: string;
     gender: boolean;
+    birthdate: string;
+    age: number;
 }
 
 export default function Athletes() {
     const [athletes, setAthletes] = useState<Athlete[]>([]);
+    //@ts-expect-error type error
     const [newAthlete, setNewAthlete] = useState<Omit<Athlete, "id">>({
         firstname: "",
         lastname: "",
@@ -38,6 +41,7 @@ export default function Athletes() {
         try {
             //@ts-expect-error type error
             await createAthlete(newAthlete);
+            //@ts-expect-error type error
             setNewAthlete({ firstname: "", lastname: "", club: "", gender: true });
             fetchData();
         } catch (error) {
@@ -91,6 +95,11 @@ export default function Athletes() {
                 value={newAthlete.club}
                 onChange={(e) => setNewAthlete({ ...newAthlete, club: e.target.value })}
             />
+            <input
+                type="date"
+                value={newAthlete.birthdate}
+                onChange={(e) => setNewAthlete({ ...newAthlete, birthdate: e.target.value })}
+            />
             <select
                 value={newAthlete.gender ? "male" : "female"}
                 onChange={(e) => setNewAthlete({ ...newAthlete, gender: e.target.value === "male" })}
@@ -124,6 +133,11 @@ export default function Athletes() {
                         value={editingAthlete.club}
                         onChange={(e) => setEditingAthlete({ ...editingAthlete, club: e.target.value })}
                     />
+                    <input
+                        type="date"
+                        value={newAthlete.birthdate}
+                        onChange={(e) => setEditingAthlete({ ...editingAthlete, birthdate: e.target.value })}
+                    />
                     <select
                         value={editingAthlete.gender ? "male" : "female"}
                         onChange={(e) => setEditingAthlete({ ...editingAthlete, gender: e.target.value === "male" })}
@@ -143,6 +157,7 @@ export default function Athletes() {
                         <p>Efternavn: {athlete.lastname}</p>
                         <p>Klub: {athlete.club}</p>
                         <p>Køn: {athlete.gender ? "Mand" : "Kvinde"}</p>
+                        <p>Alder: {athlete.age}</p>
                         <button className="edit-athlete-button" onClick={() => startEditingAthlete(athlete)}>
                             Rediger
                         </button>
