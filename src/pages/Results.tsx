@@ -7,7 +7,7 @@ interface Result {
     disciplineName: string;
     resultValue: string;
     athleteFirstname: string;
-    athleteLastname: string;
+    athleteLastName: string;
     resultDate: string;
 }
 
@@ -17,7 +17,7 @@ export default function Results() {
         disciplineName: "",
         resultValue: "",
         athleteFirstname: "",
-        athleteLastname: "",
+        athleteLastName: "",
         resultDate: "",
     });
     const [editingResult, setEditingResult] = useState<Result | null>(null);
@@ -180,7 +180,7 @@ export default function Results() {
                                 {result.resultValue} {getResultUnit(result.disciplineName)}
                             </td>
                             <td>
-                                {result.athleteFirstname} {result.athleteLastname}
+                                {result.athleteFirstname} {result.athleteLastName}
                             </td>
                             <td>{result.resultDate}</td>
                             <td>
