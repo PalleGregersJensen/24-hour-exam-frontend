@@ -1,6 +1,6 @@
 .navHeader {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 1em;
     padding: 0.2em;
     background-color: yellowgreen;

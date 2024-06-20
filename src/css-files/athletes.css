@@ -1,0 +1,14 @@
+.athletes-container{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1em;
+    background-color: white;
+    color: black;
+}
+
+.athlete-card{
+    padding: 1em;
+    background-color: white;
+    color: black;
+    border: 0.1em solid black;
+}

@@ -7,6 +7,9 @@ const Layout = () => {
             <header className="navHeader">
                 <NavLink to="/home">Home</NavLink>
                 <NavLink to="/contact">Contact</NavLink>
+                <NavLink to="/athletes">Athletes</NavLink>
+                <NavLink to="/results">Results</NavLink>
+                <NavLink to="/disciplines">Disciplines</NavLink>
             </header>
 
             <Outlet />
