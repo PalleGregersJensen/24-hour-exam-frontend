@@ -18,6 +18,12 @@ interface Result {
     disciplineName: string;
 }
 
+interface Discipline {
+    id: number;
+    name: string;
+    resultType: string;
+}
+
 const endpoint = "http://localhost:8000";
 
 
@@ -76,7 +82,7 @@ async function fetchResults() {
 
 
 //Create results
-async function createResults(result: Result) {
+async function createResult(result: Result) {
     const response = await fetch(`${endpoint}/results`, {
         method: "POST",
         headers: {
@@ -88,7 +94,7 @@ async function createResults(result: Result) {
 }
 
 //Delete results
-async function deleteResults(id: number) {
+async function deleteResult(id: number) {
     const response = await fetch(`${endpoint}/results/${id}`, {
         method: "DELETE",
     });
@@ -107,5 +113,49 @@ async function editResult(id: number, result: Result) {
     return response;
 }
 
+///////////////////////////////// DISCIPLINES /////////////////////////////////
 
-export { endpoint, fetchAthletes, createAthlete, deleteAthlete, editAthlete, fetchResults, createResults, deleteResults, editResult};
+//Fetch disciplines
+async function fetchDisciplines() {
+    const data = await fetch(`${endpoint}/disciplines`);
+    const response = await data.json();
+    console.log(response);
+    return response;
+}
+
+
+//Create discipline
+async function createDiscipline(discipline: Discipline) {
+    const response = await fetch(`${endpoint}/disciplines`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(discipline),
+    });
+    return response;
+}
+
+//Delete discipline
+async function deleteDiscipline(id: number) {
+    const response = await fetch(`${endpoint}/disciplines/${id}`, {
+        method: "DELETE",
+    });
+    return response;
+}
+
+//Edit discipline
+async function editDiscipline(id: number, discipline: Discipline) {
+    const response = await fetch(`${endpoint}/disciplines/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(discipline),
+    });
+    return response;
+}
+
+
+
+export { endpoint, fetchAthletes, createAthlete, deleteAthlete, editAthlete, fetchResults, createResult, deleteResult, editResult, fetchDisciplines, editDiscipline, createDiscipline, deleteDiscipline};
