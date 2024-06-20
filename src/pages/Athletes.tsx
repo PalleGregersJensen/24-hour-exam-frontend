@@ -14,16 +14,19 @@ interface Athlete {
 
 export default function Athletes() {
     const [athletes, setAthletes] = useState<Athlete[]>([]);
-    //@ts-expect-error type error
-    const [newAthlete, setNewAthlete] = useState<Omit<Athlete, "id">>({
+    const [newAthlete, setNewAthlete] = useState<Omit<Athlete, "id" | "age">>({
         firstname: "",
         lastname: "",
         club: "",
         gender: true,
+        birthdate: "",
     });
     const [editingAthlete, setEditingAthlete] = useState<Athlete | null>(null);
+    const [searchTerm, setSearchTerm] = useState<string>("");
+    const [filterGender, setFilterGender] = useState<string>("");
+    const [filterClub, setFilterClub] = useState<string>("");
+    const [sortField, setSortField] = useState<string>("");
 
-    // Funktion til at hente data fra backend
     const fetchData = async () => {
         try {
             const athletesData = await fetchAthletes();
@@ -39,10 +42,8 @@ export default function Athletes() {
 
     const handleCreateAthlete = async () => {
         try {
-            //@ts-expect-error type error
             await createAthlete(newAthlete);
-            //@ts-expect-error type error
-            setNewAthlete({ firstname: "", lastname: "", club: "", gender: true });
+            setNewAthlete({ firstname: "", lastname: "", club: "", gender: true, birthdate: "" });
             fetchData();
         } catch (error) {
             console.error("Fejl ved oprettelse af atlet:", error);
@@ -72,10 +73,52 @@ export default function Athletes() {
         setEditingAthlete(athlete);
     };
 
+    const filteredAthletes = athletes
+        .filter(
+            (athlete) =>
+                athlete.firstname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                athlete.lastname.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        .filter((athlete) => (filterGender ? (filterGender === "male" ? athlete.gender : !athlete.gender) : true))
+        .filter((athlete) => (filterClub ? athlete.club.toLowerCase().includes(filterClub.toLowerCase()) : true))
+        .sort((a, b) => {
+            if (!sortField) return 0;
+            const fieldA = (a as any)[sortField];
+            const fieldB = (b as any)[sortField];
+            return fieldA > fieldB ? 1 : -1;
+        });
+
     return (
         <>
             <h1>Atleter</h1>
             <p>Oversigt over atleter</p>
+
+            <div className="search-and-filter">
+                <input
+                    type="text"
+                    placeholder="Søg efter navn"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <select onChange={(e) => setFilterGender(e.target.value)} value={filterGender}>
+                    <option value="">Alle køn</option>
+                    <option value="male">Mand</option>
+                    <option value="female">Kvinde</option>
+                </select>
+                <input
+                    type="text"
+                    placeholder="Filtrer efter klub"
+                    value={filterClub}
+                    onChange={(e) => setFilterClub(e.target.value)}
+                />
+                <select onChange={(e) => setSortField(e.target.value)} value={sortField}>
+                    <option value="">Sorter efter</option>
+                    <option value="firstname">Fornavn</option>
+                    <option value="lastname">Efternavn</option>
+                    <option value="club">Klub</option>
+                </select>
+            </div>
+
             <p>Tilføj atleter:</p>
             <input
                 type="text"
@@ -135,7 +178,7 @@ export default function Athletes() {
                     />
                     <input
                         type="date"
-                        value={newAthlete.birthdate}
+                        value={editingAthlete.birthdate}
                         onChange={(e) => setEditingAthlete({ ...editingAthlete, birthdate: e.target.value })}
                     />
                     <select
@@ -151,7 +194,7 @@ export default function Athletes() {
             )}
 
             <section className="athletes-container">
-                {athletes.map((athlete: Athlete) => (
+                {filteredAthletes.map((athlete: Athlete) => (
                     <div key={athlete.id} className="athlete-card">
                         <p>Fornavn: {athlete.firstname}</p>
                         <p>Efternavn: {athlete.lastname}</p>
